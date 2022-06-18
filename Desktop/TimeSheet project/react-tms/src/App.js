@@ -1,10 +1,10 @@
 import './App.css';
-import { BrowserRouter as Router,Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Sidebar from './components/sidebar/sidebar';
 import FooterComponent from './components/FooterComponent';
-import Login from './components/login/login';
+
 
 function App() {
   return (
