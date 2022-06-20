@@ -47,7 +47,7 @@
   color: white;
 }
 .scrollTable {
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
   height: 70vh;
   text-align: center;
