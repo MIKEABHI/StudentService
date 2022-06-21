@@ -1,26 +1,36 @@
 import axios from 'axios';
 
-const EMPLOYEE_API_BASE_URL = "http://localhost:8080/api/v1/employees";
+const EMPLOYEE_API_BASE_URL = 'http://localhost:9094/employee/employee/v1/api/employee/get'; //"http://localhost:8080/api/v1/employees";
+const token = localStorage.getItem('token');
+const authAxios = axios.create({
+    baseURL: EMPLOYEE_API_BASE_URL,
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+}
+);
+
 
 class EmployeeService {
 
-    getEmployees(){
-        return axios.get(EMPLOYEE_API_BASE_URL);
+    getEmployees() {
+        return authAxios.get('');
     }
 
-    createEmployee(employee){
+    createEmployee(employee) {
         return axios.post(EMPLOYEE_API_BASE_URL, employee);
     }
 
-    getEmployeeById(employeeId){
-        return axios.get(EMPLOYEE_API_BASE_URL + '/' + employeeId);
+    getEmployeeById(employeeId) {
+        console.log("employeeId " + employeeId);
+        return authAxios.get('/' + employeeId);
     }
 
-    updateEmployee(employee, employeeId){
+    updateEmployee(employee, employeeId) {
         return axios.put(EMPLOYEE_API_BASE_URL + '/' + employeeId, employee);
     }
 
-    deleteEmployee(employeeId){
+    deleteEmployee(employeeId) {
         return axios.delete(EMPLOYEE_API_BASE_URL + '/' + employeeId);
     }
 }

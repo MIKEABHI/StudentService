@@ -105,11 +105,3 @@ label{
   .btn.btn-signin:focus {
     background-color: rgb(12, 97, 33);
   }
-  
-
-  #content {
-    width: 100%;
-    padding: 20px;
-    min-height: 100vh;
-    transition: all 0.3s;
-}

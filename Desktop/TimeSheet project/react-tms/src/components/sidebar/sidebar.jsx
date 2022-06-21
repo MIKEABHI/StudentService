@@ -2,10 +2,7 @@ import React, { Component } from 'react'
 import './sidebar.css';
 import { Link } from "react-router-dom";
 import Login from '../login/login';
-import { Route, Switch } from 'react-router-dom'
-import ListEmployeeComponent from '../ListEmployeeComponent';
-import CreateEmployeeComponent from '../CreateEmployeeComponent';
-import ViewEmployeeComponent from '../ViewEmployeeComponent';
+import { Route, Switch } from 'react-router-dom';
 import Timesheet from '../timesheets/timesheets';
 import Admin from '../admin/admin';
 import Dashboard from '../dashboard/dashboard';
@@ -13,6 +10,9 @@ import Project from '../projects/project';
 import Task from '../tasks/tasks';
 import Client from '../clients/client';
 import logo from '../../images/logo.png'
+import EmployeeList from '../employee/employeeList';
+import EmployeeView from '../employee/employeeView';
+import EmployeeCreateUpdate from '../employee/employeeCreateUpdate';
 
 class Sidebar extends Component {
     constructor(props) {
@@ -151,7 +151,7 @@ class Sidebar extends Component {
                             </button>
 
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                               
+
                                 <ul className="nav navbar-nav ml-auto list-unstyled CTAs">
                                     <li>
                                         <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" className="">
@@ -177,9 +177,9 @@ class Sidebar extends Component {
 
                         <Switch>
                             <Route path="/" exact component={Login}></Route>
-                            <Route path="/employees" component={ListEmployeeComponent}></Route>
-                            <Route path="/add-employee/:id" component={CreateEmployeeComponent}></Route>
-                            <Route path="/view-employee/:id" component={ViewEmployeeComponent}></Route>
+                            <Route path="/employees" component={EmployeeList}></Route>
+                            <Route path="/add-employee/:id" component={EmployeeCreateUpdate}></Route>
+                            <Route path="/view-employee/:id" component={EmployeeView}></Route>
                             {/* <Route path = "/update-employee/:id" component = {UpdateEmployeeComponent}></Route> */}
                             {/* <Route exact path="/about" component = {About}></Route> 
                           <Route exact path="/test" component = {Test}></Route>  */}

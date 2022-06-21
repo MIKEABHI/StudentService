@@ -4,4 +4,5 @@ export class UserLogin {
     this.password = password;
     this.id = id;
   }
+
 }

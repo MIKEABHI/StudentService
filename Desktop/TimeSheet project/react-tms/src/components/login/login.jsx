@@ -36,9 +36,11 @@ class Login extends Component {
 
     this.setState({ loading: true });
     loginservice.login(user).then(data => {
+      localStorage.setItem("token", data.data.accessToken);
+      console.log("Token ", localStorage.getItem('token'));
       this.props.history.push("/dashboard");
       toast.success("logged in!");
-      console.log("Logged in successfully ", user);
+      //console.log("Logged in successfully ", localStorage.getItem('token'));
     }, error => {
       this.setState({
         errorMessage: "username_email or password is not valid",
