@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import template from '../../images/HolidayCalendar.xlsx'
 import AdminService from '../../services/AdminService';
 import { toast } from 'react-toastify';
+import TableScrollbar from 'react-table-scrollbar';
 
 class Admin extends Component {
     constructor(props) {
@@ -9,14 +10,18 @@ class Admin extends Component {
 
         this.state = {
             holidayCalendar: [],
-        }
+            calendarYears: [],
+            selectedYear: '',
+        };
+        this.getHolidayCalendar = this.getHolidayCalendar.bind(this);
+        this.uploadTemplate = this.uploadTemplate.bind(this);
+        this.downloadCalendar = this.downloadCalendar.bind(this);
     }
 
 
     uploadTemplate(e) {
         const target = e.target;
         if (target.files && target.files.length > 0) {
-            console.log(target.files[0].name);
         }
         AdminService.uploadHolidayCalendar(target.files[0]).then((res) => {
             toast.success("Uploaded Succesfully!");
@@ -25,49 +30,85 @@ class Admin extends Component {
     }
 
     downloadCalendar() {
+        AdminService.downloadCalendar(this.state.selectedYear).then((res) => {
+            const blob = new Blob([res], { type: 'application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const nav = (window.navigator);
+            if (window.navigator && nav.msSaveOrOpenBlob) {
+                nav.msSaveOrOpenBlob(blob);
+                return;
+            }
+            const data = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = data;
+            link.download = 'HolidayData.xlsx';
+            link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+            setTimeout(function () {
+                window.URL.revokeObjectURL(data);
+                link.remove();
+            }, 1000);
+        });
 
     }
 
-    componentDidMount() {
-        AdminService.getHolidayCalendar().then((res) => {
-            this.setState({ holidayCalendar: res.data });
+    getHolidayCalendar(year) {
+        AdminService.getHolidayCalendar(year).then((res) => {
+            this.setState({ holidayCalendar: res.data, selectedYear: year });
         });
+    }
+
+    componentDidMount() {
+
+        AdminService.getCalendarYears().then((res) => {
+            this.setState({ calendarYears: res.data });
+        });
+
+        this.getHolidayCalendar(new Date().getFullYear());
+
     }
 
 
 
     render() {
-        const { holidayCalendar } = this.state;
+        const { holidayCalendar, calendarYears } = this.state;
         return (
             <div>
-                <h2 className="text-center">Red-Shift Holiday Calendar</h2>
                 <br></br>
-                <div className="row scrollTable">
-                    <table className="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>S.No</th>
-                                <th>Date (DD-MM-YYY)</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                holidayCalendar.map(
-                                    (holiday) => {
-                                        return (
-                                            <tr key={holiday.id}>
-                                                <td> {holiday.id} </td>
-                                                <td> {holiday.date | 'dd-MM-yyyy'} </td>
-                                                <td> {holiday.description} </td>
-                                            </tr>
-                                        )
-                                    }
-                                )
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                <div className="row">
+                    <h2 className="text-center">Red-Shift Holiday Calendar</h2>
+                    <label htmlFor="year">Year: </label>
+                    <select className="form-control input-length dropdown" name="cName" style={{ width: "10%" }} onChange={(e) => this.getHolidayCalendar(e.target.value)}>
+                        {calendarYears.map((year) => (
+                            <option key={year.c_id} value={year.calendarName}>{year.calendarName}</option>
+                        ))};
+                    </select>
+                    <TableScrollbar rows={5}>
+                        <table className="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Date (DD-MM-YYY)</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    holidayCalendar.map(
+                                        (holiday) => {
+                                            return (
+                                                <tr key={holiday.id}>
+                                                    <td> {holiday.id} </td>
+                                                    <td> {holiday.date | 'dd-MM-yyyy'} </td>
+                                                    <td> {holiday.description} </td>
+                                                </tr>
+                                            )
+                                        }
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                    </TableScrollbar>
+                </div >
                 <br />
                 <div className="row">
                     <a href={template} className="column ml-md-2 btn btn-primary btn-sm"
@@ -93,7 +134,7 @@ class Admin extends Component {
                     </div>
                 </div>
 
-            </div>
+            </div >
         )
     }
 }

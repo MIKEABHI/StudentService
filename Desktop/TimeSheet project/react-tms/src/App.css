@@ -64,8 +64,13 @@
 table {
   background: #e8ecff;
   color: #fff;
+  width: 100%;
 }
 
 thead {
   background: #c9d4fe;
+}
+
+.TableScrollbar {
+  width: 100%;
 }

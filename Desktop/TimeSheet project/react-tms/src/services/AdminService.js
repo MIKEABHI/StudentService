@@ -13,16 +13,26 @@ const authAxios = axios.create({
 
 
 
+
 class AdminService {
 
-    getHolidayCalendar() {
-        return authAxios.get('/getByYear', '2022');
+    getHolidayCalendar(year) {
+        console.log("service year", year)
+        return authAxios.get('/getByYear', { params: { calendaryr: year } });
     }
 
     uploadHolidayCalendar(file) {
         const formData = new FormData();
         formData.append('file', file);
         return authAxios.post('/save', formData);
+    }
+
+    getCalendarYears() {
+        return authAxios.get('/getAllYears');
+    }
+
+    downloadCalendar(year) {
+        return authAxios.get('/createExcel', { responseType: 'blob', params: { calendaryr: year } });
     }
 }
 
